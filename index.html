@@ -44,13 +44,15 @@
   }
   .balloon::before { content:""; position:absolute; width:7px; height:9px; background:inherit; bottom:-5px; left:26px; clip-path:polygon(0 0,100% 0,50% 100%); }
   .balloon::after { content:""; position:absolute; width:1px; height:130px; background:#6b5265; left:29px; top:74px; opacity:.65; }
-  .b1{left:3%;top:22%;background:#ff6b8a}.b2{right:4%;top:28%;background:#7c9cff;animation-delay:1s}.b3{left:7%;top:64%;background:#ffd166;animation-delay:2s}.b4{right:7%;top:67%;background:#65d6c1;an[...]}
+  .b1{left:3%;top:22%;background:#ff6b8a}.b2{right:4%;top:28%;background:#7c9cff;animation-delay:1s}.b3{left:7%;top:64%;background:#ffd166;animation-delay:2s}.b4{right:7%;top:67%;background:#65d6c1;animation-delay:3s}
   @keyframes float { 0%,100%{transform:translateY(0) rotate(-3deg)} 50%{transform:translateY(-20px) rotate(4deg)} }
 
   #confetti { position:fixed; inset:0; pointer-events:none; z-index:30; overflow:hidden; }
   .piece {
-    position:absolute; width:9px; height:15px; top:-25px;
+    position:absolute; width:12px; height:12px; top:-25px;
+    border-radius:50%;
     animation:fall linear forwards;
+    filter:drop-shadow(0 2px 3px rgba(0,0,0,0.2));
   }
   @keyframes fall { to { transform:translate3d(var(--drift),110vh,0) rotate(720deg); } }
 
@@ -176,16 +178,19 @@
 
 <script>
 const confetti = document.getElementById('confetti');
-const shapes = ['■','●','▲','✦','◆'];
+const colors = ['#ff6b8a', '#ffd166', '#65d6c1', '#7c9cff', '#c889ff', '#ff9d4f', '#ffb3d9', '#a8e6cf', '#ffc0cb', '#87ceeb'];
+
 function makeConfetti(amount=90, burst=false) {
   for(let i=0;i<amount;i++){
     const el=document.createElement('div');
     el.className='piece';
-    el.textContent=shapes[Math.floor(Math.random()*shapes.length)];
+    const color = colors[Math.floor(Math.random()*colors.length)];
+    el.style.backgroundColor = color;
     el.style.left=(burst ? 50 + (Math.random()*20-10) : Math.random()*100)+'vw';
     el.style.top=burst ? '45vh' : '-25px';
-    el.style.fontSize=(8+Math.random()*10)+'px';
-    el.style.opacity=.65+Math.random()*.35;
+    el.style.width=(8+Math.random()*8)+'px';
+    el.style.height=el.style.width;
+    el.style.opacity=.7+Math.random()*.3;
     el.style.setProperty('--drift',(Math.random()*260-130)+'px');
     el.style.animationDuration=(burst ? 1.5+Math.random()*2 : 4+Math.random()*5)+'s';
     el.style.animationDelay=(burst ? Math.random()*.25 : Math.random()*3)+'s';
@@ -193,12 +198,14 @@ function makeConfetti(amount=90, burst=false) {
     setTimeout(()=>el.remove(),9000);
   }
 }
+
 function celebrate(){ makeConfetti(180,true); }
 function showSurprise(){
   document.getElementById('surprise').classList.add('show');
   celebrate();
   document.getElementById('surprise').scrollIntoView({behavior:'smooth',block:'center'});
 }
+
 makeConfetti(110);
 setInterval(()=>makeConfetti(18),2500);
 </script>
